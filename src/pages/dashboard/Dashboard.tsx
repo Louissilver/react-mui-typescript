@@ -1,13 +1,13 @@
 import { FerramentasDeDetalhe } from '../../shared/components';
 import { LayoutBaseDePagina } from '../../shared/layouts/LayoutBaseDePagina';
 
-export const Dashboard = () => {
+export const Dashboard: React.FC = ({ children }) => {
   return (
     <LayoutBaseDePagina
       titulo="Página inicial"
       ferramentasDaListagem={<FerramentasDeDetalhe mostrarBotaoSalvarEVoltar />}
     >
-      Testando
+      {children}
     </LayoutBaseDePagina>
   );
 };
