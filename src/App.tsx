@@ -1,19 +1,18 @@
 import { BrowserRouter } from 'react-router-dom';
 import { AppRoutes } from './routes';
-import { MenuLateral } from './shared/components';
-import { DrawerProvider } from './shared/contexts';
+import BarraDeAplicativos from './shared/components/barra-de-aplicativos/BarraDeAplicativos';
+import { Rodape } from './shared/components/rodape/Rodape';
 import { AppThemeProvider } from './shared/contexts/ThemeContext';
 
 export const App = () => {
   return (
     <AppThemeProvider>
-      <DrawerProvider>
-        <BrowserRouter>
-          <MenuLateral>
-            <AppRoutes />
-          </MenuLateral>
-        </BrowserRouter>
-      </DrawerProvider>
+      <BrowserRouter>
+        <BarraDeAplicativos>
+          <AppRoutes />
+          <Rodape />
+        </BarraDeAplicativos>
+      </BrowserRouter>
     </AppThemeProvider>
   );
 };

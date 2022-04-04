@@ -1,40 +1,15 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { useEffect } from 'react';
-import { useDrawerContext } from '../shared/contexts';
-import { Dashboard } from '../pages';
+import { Cadastro, Contato, Empreendimentos, Inicio, Sobre } from '../pages';
 
 export const AppRoutes = () => {
-  const { setDrawerOptions } = useDrawerContext();
-
-  useEffect(() => {
-    setDrawerOptions([
-      {
-        label: 'Página inicial',
-        path: 'pagina-inicial',
-        icon: 'home',
-      },
-      {
-        label: 'Cidades',
-        path: 'cidades',
-        icon: 'map',
-      },
-      {
-        label: 'Pessoas',
-        path: 'pessoas',
-        icon: 'person',
-      },
-    ]);
-  }, []);
-
   return (
     <Routes>
-      <Route
-        path="/pagina-inicial"
-        element={<Dashboard>Página inicial</Dashboard>}
-      />
-      <Route path="/cidades" element={<Dashboard>Cidades</Dashboard>} />
-      <Route path="/pessoas" element={<Dashboard>Pessoas</Dashboard>} />
-      <Route path="*" element={<Navigate to="/pagina-inicial"></Navigate>} />
+      <Route path="/inicio" element={<Inicio />} />
+      <Route path="/sobre" element={<Sobre />} />
+      <Route path="/empreendimentos" element={<Empreendimentos />} />
+      <Route path="/cadastro" element={<Cadastro />} />
+      <Route path="/contato" element={<Contato />} />
+      <Route path="*" element={<Navigate to="/inicio"></Navigate>} />
     </Routes>
   );
 };
