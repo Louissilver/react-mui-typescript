@@ -60,7 +60,7 @@ const BarraDeAplicativos: React.FC = ({ children }) => {
 
   return (
     <Box display="flex" flexDirection="column">
-      <AppBar position="static">
+      <AppBar position="sticky">
         <Container maxWidth="lg">
           <Toolbar
             disableGutters
