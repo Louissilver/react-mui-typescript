@@ -1,6 +1,5 @@
 import { useTheme, useMediaQuery, Container } from '@mui/material';
 import { Box } from '@mui/system';
-import { Rodape } from '../components/rodape/Rodape';
 
 export const LayoutBaseDePagina: React.FC = ({ children }) => {
   const theme = useTheme();
@@ -10,9 +9,11 @@ export const LayoutBaseDePagina: React.FC = ({ children }) => {
   return (
     <>
       <Box
-      maxWidth="100%"
+        height="100%"
         sx={{
-          
+          backgroundImage: { xs: 'none', md: 'url("./bgcap.svg")' },
+          backgroundRepeat: { xs: 'none', md: 'no-repeat' },
+          backgroundSize: { xs: 'none', md: 'cover' },
         }}
       >
         <Container maxWidth={smDown ? 'sm' : mdDown ? 'md' : 'lg'}>

@@ -10,7 +10,7 @@ export const App = () => {
       <BrowserRouter>
         <BarraDeAplicativos>
           <AppRoutes />
-          <Rodape/>
+          <Rodape />
         </BarraDeAplicativos>
       </BrowserRouter>
     </AppThemeProvider>
