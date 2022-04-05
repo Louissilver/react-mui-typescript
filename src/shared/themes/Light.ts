@@ -12,7 +12,7 @@ export const LightTheme = createTheme({
     },
     secondary: {
       main: '#091C48',
-      dark: indigo[400],
+      dark: indigo[900],
       light: indigo[300],
       contrastText: '#ffffff',
     },
