@@ -12,7 +12,7 @@ export const LayoutBaseDePagina: React.FC = ({ children }) => {
       <Box
       maxWidth="100%"
         sx={{
-          backgroundImage: 'linear-gradient( to right, #F83821 0%,#F83821 1%, #FE9426 1.1%,#FE9426 2%, #EDDDB1 2.1%,#EDDDB1 3.2%, white 3.3%, white 97%, #009CE0 98%, #003EA5 99%, #1D1F48 100% )',
+          
         }}
       >
         <Container maxWidth={smDown ? 'sm' : mdDown ? 'md' : 'lg'}>
