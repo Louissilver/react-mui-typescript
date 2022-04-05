@@ -1,36 +1,58 @@
-import { useTheme, useMediaQuery, Container } from '@mui/material';
+import { ReactNode } from 'react';
+import {
+  Typography,
+  useTheme,
+  IconButton,
+  Icon,
+  useMediaQuery,
+} from '@mui/material';
 import { Box } from '@mui/system';
+import { useDrawerContext } from '../contexts';
 
-export const LayoutBaseDePagina: React.FC = ({ children }) => {
+interface ILayoutBaseDePaginaProps {
+  titulo: string;
+  ferramentasDaListagem?: ReactNode;
+}
+
+export const LayoutBaseDePagina: React.FC<ILayoutBaseDePaginaProps> = ({
+  children,
+  titulo,
+  ferramentasDaListagem,
+}) => {
   const theme = useTheme();
   const smDown = useMediaQuery(theme.breakpoints.down('sm'));
   const mdDown = useMediaQuery(theme.breakpoints.down('md'));
 
+  const { toggleDrawerOpen } = useDrawerContext();
+
   return (
-    <>
+    <Box height="100%" display="flex" flexDirection="column" gap={1}>
       <Box
-        height="100%"
-        sx={{
-          backgroundImage: { xs: 'none', md: 'url("./bgcap.svg")' },
-          backgroundRepeat: { xs: 'none', md: 'no-repeat' },
-          backgroundSize: { xs: 'none', md: 'cover' },
-        }}
+        display="flex"
+        alignItems="center"
+        padding={1}
+        gap={1}
+        height={theme.spacing(smDown ? 6 : mdDown ? 8 : 12)}
       >
-        <Container maxWidth={smDown ? 'sm' : mdDown ? 'md' : 'lg'}>
-          <Box
-            overflow="auto"
-            padding={
-              smDown
-                ? theme.spacing(1)
-                : mdDown
-                ? theme.spacing(2)
-                : theme.spacing(4)
-            }
-          >
-            {children}
-          </Box>
-        </Container>
+        {smDown && (
+          <IconButton onClick={toggleDrawerOpen}>
+            <Icon>menu</Icon>
+          </IconButton>
+        )}
+        <Typography
+          whiteSpace="nowrap"
+          overflow="hidden"
+          textOverflow="ellipsis"
+          component="h1"
+          variant={smDown ? 'h5' : mdDown ? 'h4' : 'h3'}
+        >
+          {titulo}
+        </Typography>
       </Box>
-    </>
+      {ferramentasDaListagem && <Box>{ferramentasDaListagem}</Box>}
+      <Box flex={1} overflow="auto">
+        {children}
+      </Box>
+    </Box>
   );
 };
