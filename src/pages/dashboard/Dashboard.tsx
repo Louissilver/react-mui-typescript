@@ -5,7 +5,7 @@ export const Dashboard: React.FC = ({ children }) => {
   return (
     <LayoutBaseDePagina
       titulo="Página inicial"
-      ferramentasDaListagem={<FerramentasDeDetalhe mostrarBotaoSalvarEVoltar />}
+      barraDeFerramentas={<FerramentasDeDetalhe mostrarBotaoSalvarEVoltar />}
     >
       {children}
     </LayoutBaseDePagina>

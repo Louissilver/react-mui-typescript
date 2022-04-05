@@ -11,13 +11,13 @@ import { useDrawerContext } from '../contexts';
 
 interface ILayoutBaseDePaginaProps {
   titulo: string;
-  ferramentasDaListagem?: ReactNode;
+  barraDeFerramentas?: ReactNode;
 }
 
 export const LayoutBaseDePagina: React.FC<ILayoutBaseDePaginaProps> = ({
   children,
   titulo,
-  ferramentasDaListagem,
+  barraDeFerramentas,
 }) => {
   const theme = useTheme();
   const smDown = useMediaQuery(theme.breakpoints.down('sm'));
@@ -49,7 +49,7 @@ export const LayoutBaseDePagina: React.FC<ILayoutBaseDePaginaProps> = ({
           {titulo}
         </Typography>
       </Box>
-      {ferramentasDaListagem && <Box>{ferramentasDaListagem}</Box>}
+      {barraDeFerramentas && <Box>{barraDeFerramentas}</Box>}
       <Box flex={1} overflow="auto">
         {children}
       </Box>
