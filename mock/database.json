@@ -2,8 +2,39 @@
   "pessoas": [
     {
       "id": 1,
-      "nome": "Luís",
-      "sobrenome": "Silveira"
+      "email": "luis@teste.com",
+      "cidadeId": 1,
+      "nomeCompleto": "Luís Silveira"
+    },
+    {
+      "id": 2,
+      "email": "fernando@teste.com",
+      "cidadeId": 1,
+      "nomeCompleto": "Fernando Silveira"
+    },
+    {
+      "id": 3,
+      "email": "iara@teste.com",
+      "cidadeId": 1,
+      "nomeCompleto": "Iara Silveira"
+    },
+    {
+      "id": 4,
+      "email": "kim@teste.com",
+      "cidadeId": 1,
+      "nomeCompleto": "Kêmilly Cardoso"
+    },
+    {
+      "id": 5,
+      "email": "paulo@teste.com",
+      "cidadeId": 3,
+      "nomeCompleto": "Paulo Lanius"
+    },
+    {
+      "id": 6,
+      "email": "carlos@teste.com",
+      "cidadeId": 2,
+      "nomeCompleto": "Carlos Afonso de Almeida Júnior"
     }
   ]
 }
