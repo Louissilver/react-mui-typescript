@@ -1,22 +1,18 @@
 import { Environment } from '../../../environment';
 import { Api } from '../axios.config';
 
-interface IListagemCidade {
+export interface IListagemCidade {
   id: number;
-  email: string;
-  cidadeId: number;
-  nomeCompleto: string;
+  nome: string;
 }
 
-interface IDetalheCidade {
+export interface IDetalheCidade {
   id: number;
-  email: string;
-  cidadeId: number;
-  nomeCompleto: string;
+  nome: string;
 }
 
 type TCidadesComTotalCount = {
-  data: IListagemCidade;
+  data: IListagemCidade[];
   totalCount: number;
 };
 
@@ -25,7 +21,7 @@ const getAll = async (
   filter = ''
 ): Promise<TCidadesComTotalCount | Error> => {
   try {
-    const urlRelativa = `/cidades?_page=${page}&_limit=${Environment.LIMITE_DE_LINHAS}&nomeCompleto_like=${filter}`;
+    const urlRelativa = `/cidades?_page=${page}&_limit=${Environment.LIMITE_DE_LINHAS}&nome_like=${filter}`;
     const { data, headers } = await Api.get(urlRelativa);
 
     if (data) {
@@ -79,7 +75,10 @@ const create = async (
   }
 };
 
-const updateById = async (id: number, dados: IDetalheCidade): Promise<any> => {
+const updateById = async (
+  id: number,
+  dados: IDetalheCidade
+): Promise<unknown> => {
   try {
     await Api.put<IDetalheCidade>(`/cidades/${id}`, dados);
   } catch (error) {
@@ -101,7 +100,7 @@ const deleteById = async (id: number): Promise<void | Error> => {
   }
 };
 
-export const cidadesService = {
+export const CidadesService = {
   getAll,
   getById,
   create,

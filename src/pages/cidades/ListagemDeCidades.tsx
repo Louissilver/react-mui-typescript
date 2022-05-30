@@ -3,9 +3,9 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { FerramentasDaListagem } from '../../shared/components';
 import { LayoutBaseDePagina } from '../../shared/layouts';
 import {
-  IListagemPessoa,
-  PessoasService,
-} from '../../shared/services/api/pessoas/PessoasService';
+  IListagemCidade,
+  CidadesService,
+} from '../../shared/services/api/cidades/CidadesService';
 import { useDebounce } from '../../shared/hooks';
 import {
   Icon,
@@ -23,12 +23,12 @@ import {
 } from '@mui/material';
 import { Environment } from '../../shared/environment';
 
-export const ListagemDePessoa: React.FC = () => {
+export const ListagemDeCidade: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { debounce } = useDebounce(1000);
   const navigate = useNavigate();
 
-  const [rows, setRows] = useState<IListagemPessoa[]>([]);
+  const [rows, setRows] = useState<IListagemCidade[]>([]);
   const [totalCount, setTotalCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -43,7 +43,7 @@ export const ListagemDePessoa: React.FC = () => {
   useEffect(() => {
     setIsLoading(true);
     debounce(() => {
-      PessoasService.getAll(pagina, busca).then((result) => {
+      CidadesService.getAll(pagina, busca).then((result) => {
         setIsLoading(false);
         if (result instanceof Error) {
           alert(result.message);
@@ -59,7 +59,7 @@ export const ListagemDePessoa: React.FC = () => {
 
   const handleDelete = (id: number) => {
     if (confirm('Tem certeza de que quer excluir esse registro?')) {
-      PessoasService.deleteById(id).then((result) => {
+      CidadesService.deleteById(id).then((result) => {
         if (result instanceof Error) {
           alert(result.message);
         } else {
@@ -74,13 +74,13 @@ export const ListagemDePessoa: React.FC = () => {
 
   return (
     <LayoutBaseDePagina
-      titulo="Listagem de pessoas"
+      titulo="Listagem de cidades"
       barraDeFerramentas={
         <FerramentasDaListagem
           mostrarInputBusca
           textoDaBusca={busca}
           textoBotaoNovo="Nova"
-          aoClicarBotaoNovo={() => navigate('/pessoas/detalhe/nova')}
+          aoClicarBotaoNovo={() => navigate('/cidades/detalhe/nova')}
           aoMudarTextoDeBusca={(texto) =>
             setSearchParams({ busca: texto, pagina: '1' }, { replace: true })
           }
@@ -96,8 +96,7 @@ export const ListagemDePessoa: React.FC = () => {
           <TableHead>
             <TableRow>
               <TableCell width={100}>Ações</TableCell>
-              <TableCell>Nome completo</TableCell>
-              <TableCell>E-mail</TableCell>
+              <TableCell>Nome</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -106,7 +105,7 @@ export const ListagemDePessoa: React.FC = () => {
                 <TableCell>
                   <IconButton
                     size="small"
-                    onClick={() => navigate(`/pessoas/detalhe/${row.id}`)}
+                    onClick={() => navigate(`/cidades/detalhe/${row.id}`)}
                   >
                     <Icon>edit</Icon>
                   </IconButton>
@@ -114,8 +113,7 @@ export const ListagemDePessoa: React.FC = () => {
                     <Icon>delete</Icon>
                   </IconButton>
                 </TableCell>
-                <TableCell>{row.nomeCompleto}</TableCell>
-                <TableCell>{row.email}</TableCell>
+                <TableCell>{row.nome}</TableCell>
               </TableRow>
             ))}
           </TableBody>
