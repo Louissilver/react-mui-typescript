@@ -8,11 +8,11 @@ import { CidadesService } from '../../shared/services/api/cidades/CidadesService
 import * as yup from 'yup';
 
 interface IFormData {
-  nome: string;
+  cidade: string;
 }
 
 const formValidationSchema: yup.SchemaOf<IFormData> = yup.object().shape({
-  nome: yup.string().required().min(3),
+  cidade: yup.string().required().min(3),
 });
 
 export const DetalheDeCidades: React.FC = () => {
@@ -26,19 +26,19 @@ export const DetalheDeCidades: React.FC = () => {
   useEffect(() => {
     if (id !== 'nova') {
       setIsLoading(true);
-      CidadesService.getById(Number(id)).then((result) => {
+      CidadesService.getById(id).then((result) => {
         setIsLoading(false);
         if (result instanceof Error) {
           alert(result.message);
           navigate('/cidades');
         } else {
-          setNome(result.nome);
+          setNome(result.cidade);
           formRef.current?.setData(result);
         }
       });
     } else {
       formRef.current?.setData({
-        nome: '',
+        cidade: '',
       });
     }
   }, [id]);
@@ -64,8 +64,8 @@ export const DetalheDeCidades: React.FC = () => {
             }
           });
         } else {
-          CidadesService.updateById(Number(id), {
-            id: Number(id),
+          CidadesService.updateById(id, {
+            id: id,
             ...dadosValidados,
           }).then((result) => {
             setIsLoading(false);
@@ -92,7 +92,7 @@ export const DetalheDeCidades: React.FC = () => {
       });
   };
 
-  const handleDelete = (id: number) => {
+  const handleDelete = (id: string) => {
     if (confirm('Tem certeza de que quer excluir esse registro?')) {
       CidadesService.deleteById(id).then((result) => {
         if (result instanceof Error) {
@@ -116,7 +116,7 @@ export const DetalheDeCidades: React.FC = () => {
           mostrarBotaoApagar={id !== 'nova'}
           mostrarBotaoSalvar
           mostrarBotaoSalvarEVoltar
-          aoClicarEmApagar={() => handleDelete(Number(id))}
+          aoClicarEmApagar={() => handleDelete(id)}
           aoClicarEmNovo={() => navigate('/cidades/detalhe/nova')}
           aoClicarEmSalvar={save}
           aoClicarEmSalvarEVoltar={saveAndClose}
@@ -141,7 +141,7 @@ export const DetalheDeCidades: React.FC = () => {
                   disabled={isLoading}
                   fullWidth
                   label="Nome"
-                  name="nome"
+                  name="cidade"
                   onChange={(e) => setNome(e.target.value)}
                 />
               </Grid>
