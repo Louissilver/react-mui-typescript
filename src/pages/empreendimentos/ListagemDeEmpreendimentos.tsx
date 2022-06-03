@@ -3,9 +3,9 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { FerramentasDaListagem } from '../../shared/components';
 import { LayoutBaseDePagina } from '../../shared/layouts';
 import {
-  IListagemCidade,
-  CidadesService,
-} from '../../shared/services/api/cidades/CidadesService';
+  IListagemEmpreendimento,
+  EmpreendimentosService,
+} from '../../shared/services/api/empreendimentos/EmpreendimentosService';
 import { useDebounce } from '../../shared/hooks';
 import {
   Icon,
@@ -23,12 +23,12 @@ import {
 } from '@mui/material';
 import { Environment } from '../../shared/environment';
 
-export const ListagemDeCidade: React.FC = () => {
+export const ListagemDeEmpreendimento: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { debounce } = useDebounce(1000);
   const navigate = useNavigate();
 
-  const [rows, setRows] = useState<IListagemCidade[]>([]);
+  const [rows, setRows] = useState<IListagemEmpreendimento[]>([]);
   const [totalCount, setTotalCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -43,12 +43,13 @@ export const ListagemDeCidade: React.FC = () => {
   useEffect(() => {
     setIsLoading(true);
     debounce(() => {
-      CidadesService.getAll(false, pagina, busca).then((result) => {
+      EmpreendimentosService.getAll(pagina, busca).then((result) => {
         setIsLoading(false);
         if (result instanceof Error) {
           alert(result.message);
           return;
         } else {
+          console.log(result);
           setTotalCount(result.totalCount);
           setRows(result.data);
         }
@@ -56,9 +57,9 @@ export const ListagemDeCidade: React.FC = () => {
     });
   }, [busca, pagina]);
 
-  const handleDelete = (id: string) => {
+  const handleDelete = (id: number) => {
     if (confirm('Tem certeza de que quer excluir esse registro?')) {
-      CidadesService.deleteById(id).then((result) => {
+      EmpreendimentosService.deleteById(id).then((result) => {
         if (result instanceof Error) {
           alert(result.message);
         } else {
@@ -73,13 +74,13 @@ export const ListagemDeCidade: React.FC = () => {
 
   return (
     <LayoutBaseDePagina
-      titulo="Listagem de cidades"
+      titulo="Listagem de empreendimentos"
       barraDeFerramentas={
         <FerramentasDaListagem
           mostrarInputBusca
           textoDaBusca={busca}
           textoBotaoNovo="Nova"
-          aoClicarBotaoNovo={() => navigate('/cidades/detalhe/nova')}
+          aoClicarBotaoNovo={() => navigate('/empreendimentos/detalhe/nova')}
           aoMudarTextoDeBusca={(texto) =>
             setSearchParams({ busca: texto, pagina: '1' }, { replace: true })
           }
@@ -104,7 +105,9 @@ export const ListagemDeCidade: React.FC = () => {
                 <TableCell>
                   <IconButton
                     size="small"
-                    onClick={() => navigate(`/cidades/detalhe/${row.id}`)}
+                    onClick={() =>
+                      navigate(`/empreendimentos/detalhe/${row.id}`)
+                    }
                   >
                     <Icon>edit</Icon>
                   </IconButton>
@@ -112,7 +115,7 @@ export const ListagemDeCidade: React.FC = () => {
                     <Icon>delete</Icon>
                   </IconButton>
                 </TableCell>
-                <TableCell>{row.cidade}</TableCell>
+                <TableCell>{row.titulo}</TableCell>
               </TableRow>
             ))}
           </TableBody>

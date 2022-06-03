@@ -2,21 +2,41 @@ import { Box, Grid, LinearProgress, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { FerramentasDeDetalhe } from '../../shared/components';
-import { VTextField, VForm, useVForm, IVFormErrors } from '../../shared/forms';
+import {
+  VTextField,
+  VForm,
+  useVForm,
+  IVFormErrors,
+  VPhoneTextField,
+} from '../../shared/forms';
 import { LayoutBaseDePagina } from '../../shared/layouts';
 import { PessoasService } from '../../shared/services/api/pessoas/PessoasService';
 import * as yup from 'yup';
+import { AutoCompleteCidade } from './componentes/AutoCompleteCidade';
+import { VDateField } from '../../shared/forms/VDateField';
+import { VCheckBox } from '../../shared/forms/VCheckBox';
 
 interface IFormData {
-  email: string;
-  cidadeId: number;
   nomeCompleto: string;
+  telefone: string;
+  cidadeInteresse: string;
+  dataCriacao?: Date;
+  contatoRealizado?: boolean;
+  aceiteDosTermos?: boolean;
 }
+
+const phoneRegExp = RegExp('^\\([\\d]{2}\\) \\d [\\d]{4}\\-[\\d]{4}$');
 
 const formValidationSchema: yup.SchemaOf<IFormData> = yup.object().shape({
   nomeCompleto: yup.string().required().min(3),
-  email: yup.string().required().email(),
-  cidadeId: yup.number().required(),
+  telefone: yup
+    .string()
+    .required()
+    .matches(phoneRegExp, 'O número de telefone não é válido.'),
+  cidadeInteresse: yup.string().required(),
+  dataCriacao: yup.date(),
+  contatoRealizado: yup.boolean(),
+  aceiteDosTermos: yup.boolean(),
 });
 
 export const DetalheDePessoas: React.FC = () => {
@@ -30,7 +50,7 @@ export const DetalheDePessoas: React.FC = () => {
   useEffect(() => {
     if (id !== 'nova') {
       setIsLoading(true);
-      PessoasService.getById(Number(id)).then((result) => {
+      PessoasService.getById(id).then((result) => {
         setIsLoading(false);
         if (result instanceof Error) {
           alert(result.message);
@@ -42,9 +62,12 @@ export const DetalheDePessoas: React.FC = () => {
       });
     } else {
       formRef.current?.setData({
-        email: '',
-        cidadeId: '',
         nomeCompleto: '',
+        telefone: '',
+        cidadeInteresse: '',
+        dataCriacao: '',
+        contatoRealizado: false,
+        aceiteDosTermos: false,
       });
     }
   }, [id]);
@@ -70,8 +93,8 @@ export const DetalheDePessoas: React.FC = () => {
             }
           });
         } else {
-          PessoasService.updateById(Number(id), {
-            id: Number(id),
+          PessoasService.updateById(id, {
+            id: id,
             ...dadosValidados,
           }).then((result) => {
             setIsLoading(false);
@@ -98,7 +121,7 @@ export const DetalheDePessoas: React.FC = () => {
       });
   };
 
-  const handleDelete = (id: number) => {
+  const handleDelete = (id: string) => {
     if (confirm('Tem certeza de que quer excluir esse registro?')) {
       PessoasService.deleteById(id).then((result) => {
         if (result instanceof Error) {
@@ -122,7 +145,7 @@ export const DetalheDePessoas: React.FC = () => {
           mostrarBotaoApagar={id !== 'nova'}
           mostrarBotaoSalvar
           mostrarBotaoSalvarEVoltar
-          aoClicarEmApagar={() => handleDelete(Number(id))}
+          aoClicarEmApagar={() => handleDelete(id)}
           aoClicarEmNovo={() => navigate('/pessoas/detalhe/nova')}
           aoClicarEmSalvar={save}
           aoClicarEmSalvarEVoltar={saveAndClose}
@@ -154,24 +177,51 @@ export const DetalheDePessoas: React.FC = () => {
             </Grid>
             <Grid container item direction="row" spacing={2}>
               <Grid item xs={12} md={8}>
-                <VTextField
+                <VPhoneTextField
                   disabled={isLoading}
                   fullWidth
-                  label="E-mail"
-                  name="email"
+                  label="Telefone celular"
+                  name="telefone"
                 />
               </Grid>
             </Grid>
             <Grid container item direction="row" spacing={2}>
               <Grid item xs={12} md={8}>
-                <VTextField
-                  disabled={isLoading}
-                  fullWidth
-                  label="Cidade"
-                  name="cidadeId"
-                />
+                <AutoCompleteCidade disabled={isLoading} />
               </Grid>
             </Grid>
+            {id !== 'nova' && (
+              <>
+                <Grid item>
+                  <Typography variant="h6">Outros</Typography>
+                </Grid>
+                <Grid container item direction="row" spacing={2}>
+                  <Grid item xs={12} md={8}>
+                    <VDateField
+                      disabled
+                      fullWidth
+                      label="Data de criação"
+                      name="dataCriacao"
+                    />
+                  </Grid>
+                </Grid>
+                <Grid container item direction="row" spacing={2}>
+                  <Grid item xs={12} md={5}>
+                    <VCheckBox
+                      name="contatoRealizado"
+                      label="Contato realizado"
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={5}>
+                    <VCheckBox
+                      name="aceiteDosTermos"
+                      disabled
+                      label="Aceite dos termos"
+                    />
+                  </Grid>
+                </Grid>
+              </>
+            )}
           </Grid>
         </Box>
       </VForm>
