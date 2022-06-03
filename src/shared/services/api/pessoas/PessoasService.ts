@@ -2,20 +2,17 @@ import { Environment } from '../../../environment';
 import { Api } from '../axios.config';
 
 export interface IListagemPessoa {
-  id: string;
+  id: number;
+  email: string;
+  cidadeId: number;
   nomeCompleto: string;
-  telefone: string;
-  cidadeInteresse: string;
 }
 
 export interface IDetalhePessoa {
-  id: string;
+  id: number;
+  email: string;
+  cidadeId: number;
   nomeCompleto: string;
-  telefone: string;
-  cidadeInteresse: string;
-  dataCriacao?: Date;
-  contatoRealizado?: boolean;
-  aceiteDosTermos?: boolean;
 }
 
 type TPessoasComTotalCount = {
@@ -28,7 +25,7 @@ const getAll = async (
   filter = ''
 ): Promise<TPessoasComTotalCount | Error> => {
   try {
-    const urlRelativa = `/clientes?_page=${page}&_limit=${Environment.LIMITE_DE_LINHAS}&nomeCompleto_like=${filter}`;
+    const urlRelativa = `/pessoas?_page=${page}&_limit=${Environment.LIMITE_DE_LINHAS}&nomeCompleto_like=${filter}`;
     const { data, headers } = await Api.get(urlRelativa);
 
     if (data) {
@@ -48,9 +45,9 @@ const getAll = async (
   }
 };
 
-const getById = async (id: string): Promise<IDetalhePessoa | Error> => {
+const getById = async (id: number): Promise<IDetalhePessoa | Error> => {
   try {
-    const { data } = await Api.get(`/clientes/${id}`);
+    const { data } = await Api.get(`/pessoas/${id}`);
 
     if (data) {
       return data;
@@ -66,9 +63,9 @@ const getById = async (id: string): Promise<IDetalhePessoa | Error> => {
 
 const create = async (
   dados: Omit<IDetalhePessoa, 'id'>
-): Promise<string | Error> => {
+): Promise<number | Error> => {
   try {
-    const { data } = await Api.post<IDetalhePessoa>('/clientes', dados);
+    const { data } = await Api.post<IDetalhePessoa>('/pessoas', dados);
 
     if (data) {
       return data.id;
@@ -83,11 +80,11 @@ const create = async (
 };
 
 const updateById = async (
-  id: string,
+  id: number,
   dados: IDetalhePessoa
 ): Promise<unknown> => {
   try {
-    await Api.put<IDetalhePessoa>(`/clientes/${id}`, dados);
+    await Api.put<IDetalhePessoa>(`/pessoas/${id}`, dados);
   } catch (error) {
     console.error(error);
     return new Error(
@@ -96,9 +93,9 @@ const updateById = async (
   }
 };
 
-const deleteById = async (id: string): Promise<void | Error> => {
+const deleteById = async (id: number): Promise<void | Error> => {
   try {
-    await Api.delete<IDetalhePessoa>(`/clientes/${id}`);
+    await Api.delete<IDetalhePessoa>(`/pessoas/${id}`);
   } catch (error) {
     console.error(error);
     return new Error(

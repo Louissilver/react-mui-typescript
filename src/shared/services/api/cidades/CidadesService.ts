@@ -2,12 +2,13 @@ import { Environment } from '../../../environment';
 import { Api } from '../axios.config';
 
 export interface IListagemCidade {
-  id: string;
-  cidade: string;
+  id: number;
+  nome: string;
 }
 
-export interface ICidades {
-  cidades: IListagemCidade[];
+export interface IDetalheCidade {
+  id: number;
+  nome: string;
 }
 
 type TCidadesComTotalCount = {
@@ -16,14 +17,11 @@ type TCidadesComTotalCount = {
 };
 
 const getAll = async (
-  isListField = false,
   page = 1,
   filter = ''
 ): Promise<TCidadesComTotalCount | Error> => {
   try {
-    const urlRelativa = isListField
-      ? `/cidades?_page=${page}&cidade_like=${filter}`
-      : `/cidades?_page=${page}&_limit=${Environment.LIMITE_DE_LINHAS}&cidade_like=${filter}`;
+    const urlRelativa = `/cidades?_page=${page}&_limit=${Environment.LIMITE_DE_LINHAS}&nome_like=${filter}`;
     const { data, headers } = await Api.get(urlRelativa);
 
     if (data) {
@@ -43,7 +41,7 @@ const getAll = async (
   }
 };
 
-const getById = async (id: string): Promise<IListagemCidade | Error> => {
+const getById = async (id: number): Promise<IDetalheCidade | Error> => {
   try {
     const { data } = await Api.get(`/cidades/${id}`);
 
@@ -60,10 +58,10 @@ const getById = async (id: string): Promise<IListagemCidade | Error> => {
 };
 
 const create = async (
-  dados: Omit<IListagemCidade, 'id'>
-): Promise<string | Error> => {
+  dados: Omit<IDetalheCidade, 'id'>
+): Promise<number | Error> => {
   try {
-    const { data } = await Api.post<IListagemCidade>('/cidades', dados);
+    const { data } = await Api.post<IDetalheCidade>('/cidades', dados);
 
     if (data) {
       return data.id;
@@ -78,11 +76,11 @@ const create = async (
 };
 
 const updateById = async (
-  id: string,
-  dados: IListagemCidade
+  id: number,
+  dados: IDetalheCidade
 ): Promise<unknown> => {
   try {
-    await Api.put<IListagemCidade>(`/cidades/${id}`, dados);
+    await Api.put<IDetalheCidade>(`/cidades/${id}`, dados);
   } catch (error) {
     console.error(error);
     return new Error(
@@ -91,9 +89,9 @@ const updateById = async (
   }
 };
 
-const deleteById = async (id: string): Promise<void | Error> => {
+const deleteById = async (id: number): Promise<void | Error> => {
   try {
-    await Api.delete<IListagemCidade>(`/cidades/${id}`);
+    await Api.delete<IDetalheCidade>(`/cidades/${id}`);
   } catch (error) {
     console.error(error);
     return new Error(

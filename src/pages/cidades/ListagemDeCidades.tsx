@@ -43,12 +43,13 @@ export const ListagemDeCidade: React.FC = () => {
   useEffect(() => {
     setIsLoading(true);
     debounce(() => {
-      CidadesService.getAll(false, pagina, busca).then((result) => {
+      CidadesService.getAll(pagina, busca).then((result) => {
         setIsLoading(false);
         if (result instanceof Error) {
           alert(result.message);
           return;
         } else {
+          console.log(result);
           setTotalCount(result.totalCount);
           setRows(result.data);
         }
@@ -56,7 +57,7 @@ export const ListagemDeCidade: React.FC = () => {
     });
   }, [busca, pagina]);
 
-  const handleDelete = (id: string) => {
+  const handleDelete = (id: number) => {
     if (confirm('Tem certeza de que quer excluir esse registro?')) {
       CidadesService.deleteById(id).then((result) => {
         if (result instanceof Error) {
@@ -112,7 +113,7 @@ export const ListagemDeCidade: React.FC = () => {
                     <Icon>delete</Icon>
                   </IconButton>
                 </TableCell>
-                <TableCell>{row.cidade}</TableCell>
+                <TableCell>{row.nome}</TableCell>
               </TableRow>
             ))}
           </TableBody>

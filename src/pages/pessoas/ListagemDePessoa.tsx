@@ -57,7 +57,7 @@ export const ListagemDePessoa: React.FC = () => {
     });
   }, [busca, pagina]);
 
-  const handleDelete = (id: string) => {
+  const handleDelete = (id: number) => {
     if (confirm('Tem certeza de que quer excluir esse registro?')) {
       PessoasService.deleteById(id).then((result) => {
         if (result instanceof Error) {
@@ -97,7 +97,7 @@ export const ListagemDePessoa: React.FC = () => {
             <TableRow>
               <TableCell width={100}>Ações</TableCell>
               <TableCell>Nome completo</TableCell>
-              <TableCell>Telefone celular</TableCell>
+              <TableCell>E-mail</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -115,7 +115,7 @@ export const ListagemDePessoa: React.FC = () => {
                   </IconButton>
                 </TableCell>
                 <TableCell>{row.nomeCompleto}</TableCell>
-                <TableCell>{row.telefone}</TableCell>
+                <TableCell>{row.email}</TableCell>
               </TableRow>
             ))}
           </TableBody>
